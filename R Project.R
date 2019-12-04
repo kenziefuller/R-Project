@@ -35,7 +35,9 @@ graduation.by.state()
 # number of schools in each region
 
 library(ggplot2)
-p <- qplot(Region, data = df, geom = "bar")
+p <- qplot(Region, data = df, geom = "bar", fill = I("royal blue"))
+p <- p + ggtitle("Number of 4-Year Colleges per Region")
+p <- p + scale_y_continuous(name = "No. of Colleges")
 p
 
 # private vs. public in each region
@@ -47,6 +49,7 @@ ptype
 # number of religious schools in each region
 
 preligious <- qplot(`Religious Affiliation`, data = df, geom = "bar", facets = ~ Region, fill = `Religious Affiliation`)
+preligious <- preligious + scale_fill_manual(values = c("medium blue", "steel blue1")) + ggtitle("Religious Affiliated Colleges by State")
 preligious
 
 # number of urban types in each region
@@ -69,15 +72,20 @@ box2
 
 # tuition at private vs. public companies
 
-ptuitiontype <- qplot(Type, Tuition, data = df, geom = "point", facets = ~ Region)
-ptuitiontype <- ptuitiontype + scale_y_continuous(labels = dollar)
+ptuitiontype <- qplot(Type, Tuition, data = df, geom = "point") + scale_y_continuous(labels = dollar)
 ptuitiontype
 
+ptuitiontype1 <- qplot(Type, data = df, geom = "bar", facets = ~ Region, fill = Type)
+ptuitiontype1 <- ptuitiontype1 + scale_fill_manual(
+  values = c("medium blue", "steelblue1")) + ggtitle("Types of Schools by Region")
+ptuitiontype1
+
 # tuition vs. enrollment
-ptuitionenrollment <- qplot(Tuition, Enrollment, data = df, geom = "point", log = "y",
-                            color = I("dark green"), alpha = I(0.5))
-ptuitionenrollment <- ptuitionenrollment + scale_x_continuous(labels = dollar)
+ptuitionenrollment <- qplot(Tuition, Enrollment, data = df, geom = "bin2d")
+ptuitionenrollment <- ptuitionenrollment + ggtitle("Tuition vs. Enrollment")
+ptuitionenrollment <- ptuitionenrollment + scale_x_continuous(labels = dollar) + scale_y_log10(labels = comma)
 ptuitionenrollment
+
 
 admitgrad <- qplot(`Percent Admitted`, `Graduation Rate`, data = df, geom = "point",
                    facets =  ~ Region, color = Tuition, alpha = I(0.5))
